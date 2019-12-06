@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn import metrics
+from scipy.spatial.distance import cdist
 from sklearn.cluster import KMeans
-from mpl_toolkits.mplot3d import Axes3D
 
 idList = ['Openness', 'Adventurousness', 'Artistic Interests', 'Experiencing Emotions', 'Creative Thinking', 'Need for Cognition', 'Questioning', 'Conscientiousness', 'Achievement Striving', 'Cautiousness', 'Dutifulness', 'Orderliness', 'Self-discipline', 'Self-efficacy', 'Extraversion', 'Active', 'Leadership', 'Cheerfulness', 'Need for Stimulation', 'Outgoing', 'Social', 'Agreeableness', 'Altruism', 'Cooperation', 'Modesty', 'Forthright', 'Compassion', 'Trust', 'Emotional Response', 'Easy to Provoke', 'Anxious', 'Despondence', 'Self-control', 'Self-monitoring', 'Stress Management']
 labelList = ['Component 1', 'Component 2', 'Component 3']
@@ -27,25 +28,19 @@ for label in labelList:
     iterables.append(principalDf[label].values)
 X = np.array(list(zip(*iterables)))
 
-# Initializing KMeans
-kmeans = KMeans(n_clusters=5)
-# Fitting with inputs
-kmeans = kmeans.fit(X)
-# Predicting the clusters
-labels = kmeans.predict(X)
-# Getting the cluster centers
-C = kmeans.cluster_centers_
+# k means determine k
+distortions = []
+K = range(1,20)
+for k in K:
+    kmeanModel = KMeans(n_clusters=k).fit(X)
+    kmeanModel.fit(X)
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
 
 
-# Plot
-fig = plt.figure()
-ax = Axes3D(fig)
-ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=labels)
-ax.scatter(C[:, 0], C[:, 1], C[:, 2], marker='*', c='#050505', s=1000)
+# Plot the elbow
+plt.plot(K, distortions, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method showing the optimal k')
 
-ax.set_xlabel('Component 1')
-ax.set_ylabel('Component 2')
-ax.set_zlabel('Component 3')
-ax.set_title('3D PCA', fontsize = 20)
-
-plt.savefig('pca.png')
+plt.savefig('elbow.png')
