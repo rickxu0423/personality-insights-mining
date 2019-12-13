@@ -9,11 +9,11 @@ from sklearn.cluster import KMeans
 
 idList = ['Openness', 'Adventurousness', 'Artistic Interests', 'Experiencing Emotions', 'Creative Thinking', 'Need for Cognition', 'Questioning', 'Conscientiousness', 'Achievement Striving', 'Cautiousness', 'Dutifulness', 'Orderliness', 'Self-discipline', 'Self-efficacy', 'Extraversion', 'Active', 'Leadership', 'Cheerfulness', 'Need for Stimulation', 'Outgoing', 'Social', 'Agreeableness', 'Altruism', 'Cooperation', 'Modesty', 'Forthright', 'Compassion', 'Trust', 'Emotional Response', 'Easy to Provoke', 'Anxious', 'Despondence', 'Self-control', 'Self-monitoring', 'Stress Management']
 labelList = ['Component 1', 'Component 2', 'Component 3']
-file = "data/personality-pca.csv"
+file = "data/personality.csv"
 plt.rcParams["figure.figsize"] = (16, 9)
 
 # PCA process
-df = pd.read_csv(file, names=idList)
+df = pd.read_csv(file)
 x = df.loc[:, idList].values
 x = StandardScaler().fit_transform(x)
 
@@ -30,7 +30,7 @@ X = np.array(list(zip(*iterables)))
 
 # k means determine k
 distortions = []
-K = range(1,20)
+K = range(1,30)
 for k in K:
     kmeanModel = KMeans(n_clusters=k).fit(X)
     kmeanModel.fit(X)

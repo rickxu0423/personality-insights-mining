@@ -16,7 +16,8 @@ def transfer(personality):
 
 
 while 1:
-    dataFile = "data/personality_raw.csv"   #input("Enter file name: ")
+    #dataFile = "data/personality_raw.csv"   #input("Enter file name: ")
+    dataFile = "data/predict_raw.csv"
     if dataFile:
         try:
             file = open(dataFile)
@@ -24,7 +25,8 @@ while 1:
         except:
             print("File not exists!")
 
-with open("data/personality.csv", "w") as csvfile:
+#with open("data/personality.csv", "w") as csvfile:
+with open("data/predict-nopca.csv", "w") as csvfile:
     filewriter = csv.writer(csvfile, delimiter=",")
     filewriter.writerow(idList)
     for line in file:
